@@ -17,40 +17,23 @@ function createEmployeeRecords(arr) {
 }
 
 function createTimeInEvent(employee, time) {
-  
-  class TimeIn {
-    constructor(date, hour) {
-      this.date = date
-      this.hour = Number(hour)
-    }
-  }
-
   const dateAndTime = time.split(' ')
-  let inDate = dateAndTime[0]
-  let inHour = dateAndTime[1]
+  let date = dateAndTime[0]
+  let hour = Number(dateAndTime[1])
+  let type = 'TimeIn'
 
-  const inEvent = new TimeIn(inDate, inHour)
-
-  employee.timeInEvents.push(inEvent)
+  employee.timeInEvents.push({type, date, hour})
   return employee
 }
 
 function createTimeOutEvent(employee, time) {
-  
-  class TimeOut {
-    constructor(date, hour) {
-      this.date = date
-      this.hour = Number(hour)
-    }
-  }
-
+ 
   const dateAndTime = time.split(' ')
-  let outDate = dateAndTime[0]
-  let outHour = dateAndTime[1]
+  let date = dateAndTime[0]
+  let hour = Number(dateAndTime[1])
+  let type = 'TimeOut'
 
-  const outEvent = new TimeOut(outDate, outHour)
-
-  employee.timeOutEvents.push(outEvent)
+  employee.timeOutEvents.push({type, date, hour})
   return employee
 }
 
@@ -80,5 +63,11 @@ function wagesEarnedOnDate(employee, time) {
 function allWagesFor(employee) {
   return employee.timeInEvents.reduce((total, day) => {
     return total += wagesEarnedOnDate(employee, day.date)
+  }, 0)
+}
+
+function calculatePayroll(employees) {
+  return employees.reduce((total, employee) => {
+    return total += allWagesFor(employee)
   }, 0)
 }
